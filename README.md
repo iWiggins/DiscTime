@@ -8,6 +8,4 @@ disctime 7:00
 
 disctime 14:00 -f shorttime
 
-disctime 6:00PM -f shortdatetime
-
-disctime 9:00 AM -format shortdatetime
+disctime 1/1/1930 2:30 -f shortdatetime
