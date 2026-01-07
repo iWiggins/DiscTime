@@ -3,13 +3,13 @@ using System.Text.RegularExpressions;
 
 internal static partial class TimeRX
 {
-    [GeneratedRegex("""^\s*(?<hour>\d{1,2})\s*:\s*(?<minute>\d{1,2})\s*$""", RegexOptions.IgnoreCase, "en-US")]
+    [GeneratedRegex("""^\s*(?<hour>\d{1,2})\s*:\s*(?<minute>\d{1,2})\s*(?<meridiem>AM|PM)?\s*$""", RegexOptions.IgnoreCase, "en-US")]
     private static partial Regex ReShortTime();
 
     [GeneratedRegex("""^\s*(?<month>\d{1,2})\s*/\s*(?<day>\d{1,2})\s*/\s*(?<year>(\d{2}){1,2})\s*$""", RegexOptions.IgnoreCase, "en-US")]
     private static partial Regex ReShortDate();
 
-    [GeneratedRegex("""^\s*(?<month>\d{1,2})\s*/\s*(?<day>\d{1,2})\s*/\s*(?<year>(\d{2}){1,2})\s+(?<hour>\d{1,2})\s*:\s*(?<minute>\d{1,2})\s*$""", RegexOptions.IgnoreCase, "en-US")]
+    [GeneratedRegex("""^\s*(?<month>\d{1,2})\s*/\s*(?<day>\d{1,2})\s*/\s*(?<year>(\d{2}){1,2})\s+(?<hour>\d{1,2})\s*:\s*(?<minute>\d{1,2})\s*(?<meridiem>AM|PM)?\s*$""", RegexOptions.IgnoreCase, "en-US")]
     private static partial Regex ReShortDateShortTime();
 
     public static DateTime? Match(string input)
@@ -30,7 +30,8 @@ internal static partial class TimeRX
                 int year = int.Parse(yearS);
                 int hour = int.Parse(hourS);
                 int minute = int.Parse(minuteS);
-                return new DateTime(year, month, day, hour, minute, 0);
+                int offset = match.Groups["meridiem"].Value == "PM" ? 12 : 0;
+                return new DateTime(year, month, day, hour + offset, minute, 0);
             }
         }
         {
@@ -55,7 +56,8 @@ internal static partial class TimeRX
                 string minuteS = match.Groups["minute"].Value;
                 int hour = int.Parse(hourS);
                 int minute = int.Parse(minuteS);
-                return DateTime.Now.Date + new TimeSpan(hour, minute, 0);
+                int offset = match.Groups["meridiem"].Value == "PM" ? 12 : 0;
+                return DateTime.Now.Date + new TimeSpan(hour + offset, minute, 0);
             }
         }
 
