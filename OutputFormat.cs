@@ -9,14 +9,11 @@ static class OutputFormatExtensions
     public static string Apply(this OutputFormat format, DateTime time)
     {
         DateTimeOffset offset = time;
-        switch(format)
+        return format switch
         {
-            case OutputFormat.ShortTime:
-            return $"<t:{offset.ToUnixTimeSeconds()}:t>";
-            case OutputFormat.ShortDateTime:
-            return $"<t:{offset.ToUnixTimeSeconds()}:f>";
-            default:
-            throw new NotSupportedException("Invalid OutputFormat");
-        }
+            OutputFormat.ShortTime => $"<t:{offset.ToUnixTimeSeconds()}:t>",
+            OutputFormat.ShortDateTime => $"<t:{offset.ToUnixTimeSeconds()}:f>",
+            _ => throw new NotSupportedException("Invalid OutputFormat"),
+        };
     }
 }
