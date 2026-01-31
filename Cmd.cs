@@ -6,11 +6,11 @@ class Cmd
     private readonly Argument<string[]> _argumentTime;
     private readonly RootCommand _root;
 
-    private string[] OutputNames => (
+    private static string[] OutputNames => [.. (
         from name in Enum.GetNames<OutputFormat>()
         from perm in Util.PermuteCase(name)
         select perm
-        ).ToArray();
+        )];
 
     public record Result(string Input, OutputFormat Format);
 
